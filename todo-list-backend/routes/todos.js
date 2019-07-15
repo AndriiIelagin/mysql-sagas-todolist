@@ -1,23 +1,33 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Todo = require("../models/todo");
 
-router.get("/", function(req, res, next) {
-  Todo.find({})
-    .then(todos => res.send(todos))
-    .catch(err => next(err));
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+    host     : 'localhost',
+    database : 'testdb',
+    user     : 'yojji',
+    password : 'password',
 });
 
-router.post("/", function(req, res, next) {
-  Todo.create(req.body)
-    .then(todo => res.status(201).send(todo))
-    .catch(err => next(err));
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting: ' + err.stack);
+        return;
+    }
+    console.log('Connected as id ' + connection.threadId);
+
 });
 
- router.delete("/:id", function(req, res, next) {
-  Todo.findOneAndDelete({_id: req.params.id})
-    .then(todo => res.send(todo))
-    .catch(err => next(err));
+router.get('/todos', (req, res) => {
+  connection.query("SELECT * FROM categories", (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+  });
+});
+
+router.post('/todos', (req, res) => {
+  res.send('im the about page!');
 });
 
 module.exports = router;
