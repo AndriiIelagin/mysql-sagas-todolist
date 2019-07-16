@@ -27,9 +27,6 @@ router.get('/todos', (req, res) => {
 });
 
 router.post('/todos', (req, res) => {
-  console.log('typeof', req.body.todo)
-  console.log('req.body.todo.text', typeof req.body.todo.text)
-  console.log('req.body.todo.categoryId', typeof Number(req.body.todo.category))
   connection.query("INSERT INTO todos(text, categoryId) VALUES (" + "'" + req.body.todo.text + "'" + ", " + Number(req.body.todo.category) + ")", (error, result) => {
     if (error) throw error;
     console.log(result);
