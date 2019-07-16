@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 
 // connection.connect((error) => {
 //     if (error) {
-//         console.erroror('error connecting: ' + error.stack);
+//         console.error('error connecting: ' + error.stack);
 //         return;
 //     }
 //     console.log('Connected as id ' + connection.threadId);
@@ -27,9 +27,10 @@ router.get('/todos', (req, res) => {
 });
 
 router.post('/todos', (req, res) => {
-  // console.log(req.body.json())
-  const values = req.body.json().then(todo => Object.values(todo));
-  connection.query("INSERT INTO todos(text, categoryId) VALUES ?", [values],  (error, result) => {
+  console.log('typeof', req.body.todo)
+  console.log('req.body.todo.text', typeof req.body.todo.text)
+  console.log('req.body.todo.categoryId', typeof Number(req.body.todo.category))
+  connection.query("INSERT INTO todos(text, categoryId) VALUES (" + "'" + req.body.todo.text + "'" + ", " + Number(req.body.todo.category) + ")", (error, result) => {
     if (error) throw error;
     console.log(result);
     res.send('Todo has added successfully ' + req.body);
