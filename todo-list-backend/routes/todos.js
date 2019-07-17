@@ -44,8 +44,15 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  // res.send('PUTTED' + req.params.id)
   connection.query('UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id, (error, result) => {
+    if (error) throw error;
+    console.log(result);
+    res.send('Todo has added successfully ' + req.params.id);
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  connection.query('DELETE FROM todos WHERE id = ' + req.params.id, (error, result) => {
     if (error) throw error;
     console.log(result);
     res.send('Todo has added successfully ' + req.params.id);
