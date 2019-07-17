@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
 // });
 
-router.get('/todos', (req, res) => {
+router.get('/', (req, res) => {
   connection.query('SELECT * FROM todos', (error, result) => {
     if (error) throw error;
     console.log(result);
@@ -26,11 +26,29 @@ router.get('/todos', (req, res) => {
   });
 });
 
-router.post('/todos', (req, res) => {
-  connection.query("INSERT INTO todos(text, categoryId) VALUES (" + "'" + req.body.todo.text + "'" + ", " + Number(req.body.todo.category) + ")", (error, result) => {
+router.post('/', (req, res) => {
+  connection.query(
+    'INSERT INTO todos(text, categoryId) VALUES (' +
+      "'" +
+      req.body.todo.text +
+      "'" +
+      ', ' +
+      Number(req.body.todo.category) +
+      ')',
+    (error, result) => {
+      if (error) throw error;
+      console.log(result);
+      res.send('Todo has toggled successfully ' + req.body);
+    }
+  );
+});
+
+router.put('/:id', (req, res) => {
+  // res.send('PUTTED' + req.params.id)
+  connection.query('UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id, (error, result) => {
     if (error) throw error;
     console.log(result);
-    res.send('Todo has added successfully ' + req.body);
+    res.send('Todo has added successfully ' + req.params.id);
   });
 });
 

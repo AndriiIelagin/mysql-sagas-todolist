@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // apply the routes to our application
-app.use('/', todoRoutes);
+app.use('/todos', todoRoutes);
 
 // run server
 app.listen(PORT, () => {
