@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: 'localhost',
-  database: 'testdb',
-  user: 'yojji',
-  password: 'password'
-});
+// const mysql = require('mysql');
+// const connection = mysql.createConnection({
+//   host: 'localhost',
+//   database: 'testdb',
+//   user: 'yojji',
+//   password: 'password'
+// });
 
 // connection.connect((error) => {
 //     if (error) {
@@ -17,13 +17,23 @@ var connection = mysql.createConnection({
 //     console.log('Connected as id ' + connection.threadId);
 
 // });
+const knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host: 'localhost',
+    user: 'yojji',
+    password: 'password',
+    database: 'testdb'
+  }
+});
 
 router.get('/', (req, res) => {
-  connection.query('SELECT * FROM todos', (error, result) => {
-    if (error) throw error;
-    console.log(result);
-    res.send(result);
-  });
+  // connection.query('SELECT * FROM todos', (error, result) => {
+  //   if (error) throw error;
+  //   console.log(result);
+  //   res.send(result);
+  // });
+  knex.select('*').from('todos').then((todos) => res.send(todos))
 });
 
 router.post('/', (req, res) => {
@@ -44,19 +54,25 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  connection.query('UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id, (error, result) => {
-    if (error) throw error;
-    console.log(result);
-    res.send('Todo has added successfully ' + req.params.id);
-  });
+  connection.query(
+    'UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id,
+    (error, result) => {
+      if (error) throw error;
+      console.log(result);
+      res.send('Todo has added successfully ' + req.params.id);
+    }
+  );
 });
 
 router.delete('/:id', (req, res) => {
-  connection.query('DELETE FROM todos WHERE id = ' + req.params.id, (error, result) => {
-    if (error) throw error;
-    console.log(result);
-    res.send('Todo has added successfully ' + req.params.id);
-  });
+  connection.query(
+    'DELETE FROM todos WHERE id = ' + req.params.id,
+    (error, result) => {
+      if (error) throw error;
+      console.log(result);
+      res.send('Todo has added successfully ' + req.params.id);
+    }
+  );
 });
 
 module.exports = router;
