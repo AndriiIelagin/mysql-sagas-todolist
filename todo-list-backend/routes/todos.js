@@ -33,46 +33,59 @@ router.get('/', (req, res) => {
   //   console.log(result);
   //   res.send(result);
   // });
-  knex.select('*').from('todos').then((todos) => res.send(todos))
+  knex
+    .select('*')
+    .from('todos')
+    .then(todos => res.send(todos));
 });
 
 router.post('/', (req, res) => {
-  connection.query(
-    'INSERT INTO todos(text, categoryId) VALUES (' +
-      "'" +
-      req.body.todo.text +
-      "'" +
-      ', ' +
-      Number(req.body.todo.category) +
-      ')',
-    (error, result) => {
-      if (error) throw error;
-      console.log(result);
-      res.send('Todo has toggled successfully ' + req.body);
-    }
-  );
+  // connection.query(
+  //   'INSERT INTO todos(text, categoryId) VALUES (' +
+  //     "'" +
+  //     req.body.todo.text +
+  //     "'" +
+  //     ', ' +
+  //     Number(req.body.todo.category) +
+  //     ')',
+  //   (error, result) => {
+  //     if (error) throw error;
+  //     console.log(result);
+  //     res.send('Todo has toggled successfully ' + req.body);
+  //   }
+  // );
+  knex('todos').insert({
+    text: req.body.todo.text,
+    categoryId: Number(req.body.todo.category)
+  });
 });
 
 router.put('/:id', (req, res) => {
-  connection.query(
-    'UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id,
-    (error, result) => {
-      if (error) throw error;
-      console.log(result);
-      res.send('Todo has added successfully ' + req.params.id);
-    }
-  );
+  // connection.query(
+  //   'UPDATE todos SET completed = NOT completed WHERE id = ' + req.params.id,
+  //   (error, result) => {
+  //     if (error) throw error;
+  //     console.log(result);
+  //     res.send('Todo has added successfully ' + req.params.id);
+  //   }
+  // );
+  knex('todos')
+    .where({ id: req.params.id })
+    .update({ completed: !completed });
 });
 
 router.delete('/:id', (req, res) => {
-  connection.query(
-    'DELETE FROM todos WHERE id = ' + req.params.id,
-    (error, result) => {
-      if (error) throw error;
-      console.log(result);
-      res.send('Todo has added successfully ' + req.params.id);
-    }
-  );
+  // connection.query(
+  //   'DELETE FROM todos WHERE id = ' + req.params.id,
+  //   (error, result) => {
+  //     if (error) throw error;
+  //     console.log(result);
+  //     res.send('Todo has added successfully ' + req.params.id);
+  //   }
+  // );
+  knex('todos')
+    .where({ id: req.params.id })
+    .del();
 });
 
 module.exports = router;
