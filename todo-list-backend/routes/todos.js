@@ -23,7 +23,7 @@ const knex = require('knex')({
     host: 'localhost',
     user: 'yojji',
     password: 'password',
-    database: 'testdb'
+    database: 'todo_list'
   }
 });
 
