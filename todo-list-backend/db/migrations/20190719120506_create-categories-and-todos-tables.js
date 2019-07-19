@@ -13,7 +13,8 @@ exports.up = function(knex) {
       .integer('categoryId')
       .unsigned()
       .notNullable()
-      .references('categories.id');
+      .references('id')
+      .inTable('categories');
   });
 };
 
